@@ -22,7 +22,8 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
+    --    'leoluz/nvim-dap-go',
+    'mfussenegger/nvim-dap-python',
   },
   config = function()
     local dap = require 'dap'
@@ -46,12 +47,12 @@ return {
     }
 
     -- Basic debugging keymaps, feel free to change to your liking!
-    vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
-    vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
-    vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
-    vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
-    vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
-    vim.keymap.set('n', '<leader>B', function()
+    vim.keymap.set('n', '<leader>bc', dap.continue, { desc = 'Debug: Start/Continue' })
+    vim.keymap.set('n', '<leader>bi', dap.step_into, { desc = 'Debug: Step Into' })
+    vim.keymap.set('n', '<leaderbbo', dap.step_over, { desc = 'Debug: Step Over' })
+    vim.keymap.set('n', '<leader>bu', dap.step_out, { desc = 'Debug: Step Out' })
+    vim.keymap.set('n', '<leader>bb', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
+    vim.keymap.set('n', '<leader>bB', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
     end, { desc = 'Debug: Set Breakpoint' })
 
@@ -78,19 +79,55 @@ return {
     }
 
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-    vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
+    vim.keymap.set('n', '<leader>bl', dapui.toggle, { desc = 'Debug: See last session result.' })
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
+    -- require('dap-go').setup {
+    --  delve = {
+    -- On Windows delve must be run attached or it crashes.
+    -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
+    --     detached = vim.fn.has 'win32' == 0,
+    --   },
+    -- }
+    --
+    -- -- Python setup
+    require('dap-python').setup 'python'
+
+    -- Add remote debugging configuration
+    dap.configurations.python = dap.configurations.python or {}
+    table.insert(dap.configurations.python, {
+      type = 'python',
+      request = 'attach',
+      name = 'Remote Attach (debugpy)',
+      connect = {
+        host = '127.0.0.1',
+        port = 5678,
       },
-    }
+      mode = 'remote',
+      cwd = vim.fn.getcwd(),
+      pathMappings = {
+        {
+          localRoot = vim.fn.getcwd(),
+          remoteRoot = '.',
+        },
+      },
+    })
+
+    -- Add keybinding for remote attach
+    vim.keymap.set('n', '<leader>br', function()
+      dap.run {
+        type = 'python',
+        request = 'attach',
+        name = 'Remote Attach (debugpy)',
+        connect = {
+          host = '127.0.0.1',
+          port = 5678,
+        },
+      }
+    end, { desc = 'Debug: Remote Attach' })
   end,
 }
