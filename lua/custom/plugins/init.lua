@@ -3,6 +3,7 @@
 --
 -- See the kickstart.nvim README for more information
 return {
+  'github/copilot.vim',
   {
     'kiyoon/jupynium.nvim',
     build = 'pip3 install --user .',
