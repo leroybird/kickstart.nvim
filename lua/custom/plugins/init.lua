@@ -3,6 +3,10 @@
 --
 -- See the kickstart.nvim README for more information
 return {
+  {
+    'tpope/vim-fugitive',
+    cmd = { 'G', 'Git' },
+  },
   'github/copilot.vim',
   -- image nvim options table. Pass to `require('image').setup`
   {

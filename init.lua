@@ -226,7 +226,6 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 
 if vim.g.vscode then
-  --
 else
   require('lazy').setup({
     -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -242,7 +241,12 @@ else
     --    require('Comment').setup({})
 
     -- "gc" to comment visual regions/lines
-    { 'numToStr/Comment.nvim', opts = {} },
+    {
+      'numToStr/Comment.nvim',
+      opts = {
+        ignore = '^$', -- Ignore empty lines
+      },
+    },
 
     -- Here is a more advanced example where we pass configuration
     -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -386,6 +390,10 @@ else
         vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
         vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
         vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+        -- Search for files from current buffer directory
+        vim.keymap.set('n', '<leader>sb', function()
+          builtin.find_files { cwd = vim.fn.expand '%:p:h' }
+        end, { desc = '[S]earch from current buffer [D]irectory' })
 
         -- Slightly advanced example of overriding default behavior and theme
         vim.keymap.set('n', '<leader>/', function()
@@ -895,33 +903,34 @@ else
     -- require 'kickstart.plugins.neo-tree',
     -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
-    -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-    --    This is the easiest way to modularize your config.
-    --
-    --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-    --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-    { import = 'custom.plugins' },
-  }, {
-    ui = {
-      -- If you are using a Nerd Font: set icons to an empty table which will use the
-      -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-      icons = vim.g.have_nerd_font and {} or {
-        cmd = '⌘',
-        config = '🛠',
-        event = '📅',
-        ft = '📂',
-        init = '⚙',
-        keys = '🗝',
-        plugin = '🔌',
-        runtime = '💻',
-        require = '🌙',
-        source = '📄',
-        start = '🚀',
-        task = '📌',
-        lazy = '💤 ',
+      -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+      --    This is the easiest way to modularize your config.
+      --
+      --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+      --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
+      { import = 'custom.plugins' },
+    }, {
+      ui = {
+        -- If you are using a Nerd Font: set icons to an empty table which will use the
+        -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+        icons = vim.g.have_nerd_font and {} or {
+          cmd = '⌘',
+          config = '🛠',
+          event = '📅',
+          ft = '📂',
+          init = '⚙',
+          keys = '🗝',
+          plugin = '🔌',
+          runtime = '💻',
+          require = '🌙',
+          source = '📄',
+          start = '🚀',
+          task = '📌',
+          lazy = '💤 ',
+        },
       },
-    },
-  })
+    })
+end
 end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
