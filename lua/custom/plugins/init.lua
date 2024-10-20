@@ -8,23 +8,94 @@ return {
     cmd = { 'G', 'Git' },
   },
   'github/copilot.vim',
-  -- image nvim options table. Pass to `require('image').setup`
-  --  {
-  --     '3rd/image.nvim',
-  --     config = function()
-  --       require('image').setup {
-  --         backend = 'kitty', -- Kitty will provide the best experience, but you need a compatible terminal
-  --         integrations = {}, -- do whatever you want with image.nvim's integrations
-  --         max_width = 100, -- tweak to preference
-  --         max_height = 12, -- ^
-  --         max_height_window_percentage = math.huge, -- this is necessary for a good experience
-  --         max_width_window_percentage = math.huge,
-  --         window_overlap_clear_enabled = true,
-  --         window_overlap_clear_ft_ignore = { 'cmp_menu', 'cmp_docs', '' },
-  --       }
-  --     end,
+  --- image nvim options table. Pass to `require('image').setup`
+  -- {
+  --   'benlubas/molten-nvim',
+  --   version = '^1.0.0', -- use version <2.0.0 to avoid breaking changes
+  --   dependencies = { '3rd/image.nvim' },
+  --   build = ':UpdateRemotePlugins',
+  --   init = function()
+  --     -- these are examples, not defaults. Please see the readme
+  --     vim.g.molten_image_provider = 'image.nvim'
+  --     vim.g.molten_output_win_max_height = 20
+  --     vim.keymap.set('n', '<leader>mp', function()
+  --       local venv = os.getenv 'VIRTUAL_ENV' or os.getenv 'CONDA_PREFIX'
+  --       if venv ~= nil then
+  --         -- in the form of /home/benlubas/.virtualenvs/VENV_NAME
+  --         venv = string.match(venv, '/.+/(.+)')
+  --         vim.cmd(('MoltenInit %s'):format(venv))
+  --       else
+  --         vim.cmd 'MoltenInit python3'
+  --       end
+  --     end, { desc = 'Initialize Molten for python3', silent = true })
+
+  --     vim.keymap.set('n', '<leader>mi', ':MoltenInit<CR>', { silent = true, desc = 'Initialize the plugin' })
+  --     vim.keymap.set('n', '<leader>me', ':MoltenEvaluateOperator<CR>', { silent = true, desc = 'run operator selection' })
+  --     vim.keymap.set('n', '<leader>ml', ':MoltenEvaluateLine<CR>', { silent = true, desc = 'evaluate line' })
+  --     vim.keymap.set('n', '<leader>mr', ':MoltenReevaluateCell<CR>', { silent = true, desc = 're-evaluate cell' })
+  --     vim.keymap.set('v', '<leader>r', ':<C-u>MoltenEvaluateVisual<CR>gv', { silent = true, desc = 'evaluate visual selection' })
+
+  --     vim.keymap.set('n', '<leader>md', ':MoltenDelete<CR>', { silent = true, desc = 'molten delete cell' })
+  --     vim.keymap.set('n', '<leader>mh', ':MoltenHideOutput<CR>', { silent = true, desc = 'hide output' })
+  --     vim.keymap.set('n', '<leader>ms', ':noautocmd MoltenEnterOutput<CR>', { silent = true, desc = 'show/enter output' })
+
+  --     vim.keymap.set('n', '<leader>mc', ':MoltenClear<CR>', { silent = true, desc = 'clear cell' })
+
+  --     local function execute_molten_cell()
+  --       local current_line = vim.fn.line '.'
+  --       local start_line, end_line
+
+  --       -- Search backward for the previous "#%%" or "# %%"
+  --       for i = current_line, 1, -1 do
+  --         local line = vim.fn.getline(i)
+  --         if line:match '^#%%' or line:match '^# %%' then
+  --           start_line = i + 1
+  --           break
+  --         end
+  --       end
+
+  --       -- If no start marker found, use the first line
+  --       start_line = start_line or 1
+
+  --       -- Search forward for the next "#%%" or "# %%"
+  --       for i = current_line, vim.fn.line '$' do
+  --         local line = vim.fn.getline(i)
+  --         if line:match '^#%%' or line:match '^# %%' then
+  --           end_line = i - 1
+  --           break
+  --         end
+  --       end
+
+  --       -- If no end marker found, use the last line
+  --       end_line = end_line or vim.fn.line '$'
+
+  --       -- Get the text between the markers
+  --     end
+  --     -- Create a command to call the function
+  --     vim.api.nvim_create_user_command('MoltenExecuteCell', execute_molten_cell, {})
+
+  --     -- Optional: Add a keymapping
+  --     vim.keymap.set('n', '<leader>mx', ':MoltenExecuteCell<CR>', { silent = true, desc = 'Execute Molten cell between markers' })
+  --   end,
+  -- },
+  -- {
+  --   '3rd/image.nvim',
+  --   config = function()
+  --     require('image').setup {
+  --       backend = 'kitty', -- Kitty will provide the best experience, but you need a compatible terminal
+  --       integrations = {}, -- do whatever you want with image.nvim's integrations
+  --       max_width = 100, -- tweak to preference
+  --       max_height = 12, -- ^
+  --       max_height_window_percentage = math.huge, -- this is necessary for a good experience
+  --       max_width_window_percentage = math.huge,
+  --       window_overlap_clear_enabled = true,
+  --       window_overlap_clear_ft_ignore = { 'cmp_menu', 'cmp_docs', '' },
+  --     }
+  --   end,
+  --   dependencies = {
+  --     'leafo/magick',
   --   },
-  -- }
+  -- },
 
   --[[
   'kevinhwang91/promise-async',
@@ -176,4 +247,5 @@ return {
   'rcarriga/nvim-notify', -- optional
   'stevearc/dressing.nvim', -- optional, UI for :JupyniumKernelSelect
   ]]
+  --}
 }
